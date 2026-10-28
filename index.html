@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>I have something special to tell you…</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600&family=Dancing+Script:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#14091a;--pink:#ff4d94;--rose:#ff8fb8;--text:#fff;--muted:#c9b3cf;--green:#2fbf82;--paper:#fff4e6;--ink:#4a2c3a}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{background:radial-gradient(circle at 50% 30%,#2e0f3a 0,var(--bg) 70%);color:var(--text);font-family:'Poppins',system-ui,sans-serif;overflow-x:hidden;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+.screen{display:none;min-height:100%;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:72px 20px 40px;position:relative;z-index:2}
+.screen.on{display:flex;animation:in .7s ease}
+@keyframes in{from{opacity:0;transform:translateY(14px)}to{opacity:1}}
+.sticker{font-size:5.5rem;filter:drop-shadow(0 0 18px #ff4d9477);animation:bob 3s ease-in-out infinite}
+.sticker img{max-width:200px;max-height:200px;border-radius:18px}
+@keyframes bob{50%{transform:translateY(-10px) rotate(3deg)}}
+h1,h2{font-family:'Playfair Display',serif;line-height:1.15}
+h1{font-size:clamp(2rem,8vw,3.4rem);color:var(--pink);margin:18px 0 10px}
+h2{font-size:clamp(1.8rem,7vw,2.8rem);margin:18px 0 6px}
+.sub{color:var(--muted);margin-bottom:18px}
+.ask{font-family:'Playfair Display',serif;font-size:clamp(1.3rem,5vw,1.8rem);color:var(--pink);margin:14px 0 26px}
+.row{display:flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap;width:100%;max-width:560px}
+button{font:inherit;cursor:pointer;border:0;border-radius:14px;color:#fff;transition:all .35s cubic-bezier(.2,.9,.3,1.3)}
+.yes{background:linear-gradient(135deg,#2fbf82,#1f9d68);padding:14px 26px;font-weight:600;font-size:1rem;box-shadow:0 8px 28px #2fbf8266}
+.no{background:#2a1a33;border:1px solid #ffffff22;color:var(--muted);padding:12px 22px;font-size:.95rem}
+.no.gone{display:none}
+.big{background:linear-gradient(135deg,var(--pink),#d6336c);padding:15px 34px;font-weight:600;font-size:1.05rem;box-shadow:0 8px 30px #ff4d9477}
+.big:hover{transform:scale(1.05)}
+#music{position:fixed;top:calc(14px + env(safe-area-inset-top));left:14px;z-index:20;background:#2a1a3399;border:1px solid #ff4d9455;padding:8px 14px;font-size:.85rem;backdrop-filter:blur(6px)}
+.heart{position:fixed;bottom:-30px;z-index:1;pointer-events:none;animation:up linear forwards;opacity:.7}
+@keyframes up{to{transform:translateY(-110vh) rotate(40deg);opacity:0}}
+/* envelope + letter */
+#env{font-size:7rem;cursor:pointer;background:none;animation:bob 2.5s ease-in-out infinite}
+.letter{display:none;background:var(--paper);color:var(--ink);max-width:520px;width:100%;padding:34px 28px;border-radius:6px;text-align:left;box-shadow:0 20px 60px #000a;background-image:repeating-linear-gradient(transparent 0 31px,#e9c9c455 31px 32px);font-family:'Dancing Script',cursive;font-size:1.45rem;line-height:32px;transform:rotate(-1deg)}
+.letter.open{display:block;animation:in .9s ease}
+.letter p{margin-bottom:32px}
+.letter .sig{text-align:right}
+/* response */
+textarea{width:100%;max-width:520px;min-height:150px;border-radius:14px;border:1px solid #ff4d9455;background:#2a1a33;color:#fff;padding:16px;font:inherit;resize:vertical;margin:14px 0}
+textarea:focus,button:focus-visible{outline:2px solid var(--pink);outline-offset:3px}
+.card{background:#ffffff0d;border:1px solid #ffffff1a;border-radius:16px;padding:18px 22px;max-width:520px;text-align:left;margin:14px 0;color:var(--muted);font-size:.95rem;line-height:1.7}
+.card b{color:var(--rose)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<button id="music" aria-label="Toggle music">🎵 Off</button>
+<audio id="song" loop preload="auto"><source src="song.mp3" type="audio/mpeg"></audio>
+
+<!-- 1. Intro -->
+<section class="screen on" id="s-intro">
+  <div class="sticker" data-img="">🐱</div>
+  <h1>I have something special<br>to tell you…</h1>
+  <p class="sub">Something that will change everything ✨</p>
+  <button class="big" id="begin">♡ Tap to Begin</button>
+</section>
+
+<!-- 2. Trust -->
+<section class="screen q" id="s-trust" data-next="s-letter">
+  <div class="sticker">🥺</div>
+  <h2>Be honest with me…</h2>
+  <p class="sub">This is important to me 💕</p>
+  <p class="ask">Do you trust me?</p>
+  <div class="row"><button class="yes">Yes, I do 💕</button><button class="no">No 😏</button></div>
+</section>
+
+<!-- 3. Love letter -->
+<section class="screen" id="s-letter">
+  <button id="env" aria-label="Open the letter">💌</button>
+  <p class="sub" id="envHint">Tap the envelope to open</p>
+  <div class="letter" id="letter">
+    <p id="L-greet"></p>
+    <p id="L-body"></p>
+    <p class="sig" id="L-sig"></p>
+  </div>
+  <button class="big" id="toFinal" style="display:none;margin-top:26px">Keep reading… 💗</button>
+</section>
+
+<!-- 4. The question -->
+<section class="screen q" id="s-final" data-next="s-reply" data-final="1">
+  <div class="sticker">🐱💐</div>
+  <h2>Last question, I promise!</h2>
+  <p class="sub">This one is the most important 🌟</p>
+  <p class="ask" id="finalAsk"></p>
+  <div class="row"><button class="yes">Yes! 💖</button><button class="no">No 😢</button></div>
+</section>
+
+<!-- 5. Response page -->
+<section class="screen" id="s-reply">
+  <div class="sticker">🎉</div>
+  <h2 id="r-title"></h2>
+  <p class="sub">You just made me the happiest person alive.</p>
+  <div class="card" id="promises"></div>
+  <p class="sub" style="margin:10px 0 0">Now tell me everything you're feeling…</p>
+  <textarea id="msg" placeholder="Type your response here 💌"></textarea>
+  <div class="row">
+    <button class="big" id="send">Send my response 💗</button>
+  </div>
+  <p class="sub" id="thanks" style="display:none;margin-top:20px"></p>
+</section>
+
+<script>
+/* ================== EDIT THIS PART ================== */
+const CONFIG = {
+  herName: "Mauli",              // her name
+  yourName: "YOUR ",            // your name
+  whatsapp: "+919316765150",                     // your number with country code, digits only e.g. 919876543210 (leave "" to only copy the message)
+  finalQuestion: "Will you be my girlfriend? 💍",
+  noLabels: ["No 😏","Are you sure? 🥺","Think again 😭"],
+  // Love letter: fill these in later
+  letterGreeting: "meow {meow},",
+  letterBody: "I was a non  believer I didn't believe in things like love at first sight or October theory, but the moment I met you I became a believer. Believer of your love Believe of destiny and Lover of yours. Ik you will be leaving  this country soon and it breaks my heart but for the time being I want to be with you share it with you and when you are gone to foreign land and think about home I want you to think about me and I too want to think of you whenever I see those white flowers or listen to the songs . SO ARE U WILL TO TAKE THIS RISK AND BE MY GIRLFRIEND. plsss.",
+  letterSign: "Forever yours,\n{lover}",
+  // Little things from my side — edit freely
+  promises: [
+    "I promise to listen — really listen.",
+    "I promise to make you laugh on the bad days.",
+    "I promise to choose you, every single day.",
+    "I promise to always be your safe place."
+  ]
+};
+/* ===================================================== */
+
+const $ = s => document.querySelector(s);
+const song = $('#song'), musicBtn = $('#music');
+const fill = t => t.replace('{name}',CONFIG.herName).replace('{you}',CONFIG.yourName);
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(e=>e.classList.remove('on'));
+  $('#'+id).classList.add('on'); scrollTo(0,0);
+}
+/* music */
+function setMusic(on){ if(on){song.play().catch(()=>{});musicBtn.textContent='🎵 On';} else {song.pause();musicBtn.textContent='🎵 Off';} }
+musicBtn.onclick = () => setMusic(song.paused);
+song.volume = .6;
+
+/* floating hearts */
+const em = ['💗','💖','💕','♥','✨'];
+setInterval(()=>{
+  const h=document.createElement('span'); h.className='heart'; h.textContent=em[Math.random()*em.length|0];
+  h.style.left=Math.random()*100+'vw'; h.style.fontSize=(12+Math.random()*20)+'px';
+  h.style.animationDuration=(6+Math.random()*6)+'s'; document.body.appendChild(h);
+  setTimeout(()=>h.remove(),12000);
+},700);
+function burst(n=50){
+  for(let i=0;i<n;i++){
+    const h=document.createElement('span'); h.className='heart'; h.textContent=em[Math.random()*em.length|0];
+    h.style.left=Math.random()*100+'vw'; h.style.fontSize=(20+Math.random()*30)+'px';
+    h.style.animationDuration=(2+Math.random()*3)+'s'; h.style.opacity=1; document.body.appendChild(h);
+    setTimeout(()=>h.remove(),5500);
+  }
+}
+
+/* intro */
+$('#begin').onclick = () => { setMusic(true); show('s-trust'); };
+
+/* yes grows, no vanishes after 3 clicks */
+document.querySelectorAll('.q').forEach(sc=>{
+  const yes=sc.querySelector('.yes'), no=sc.querySelector('.no'); let n=0;
+  no.onclick = () => {
+    n++;
+    yes.style.fontSize = (1 + n*0.9) + 'rem';
+    yes.style.padding = (14+n*14)+'px '+(26+n*30)+'px';
+    yes.style.width = n>=3 ? '100%' : 'auto';
+    if(n>=3){ no.classList.add('gone'); }
+    else no.textContent = CONFIG.noLabels[n] || 'No';
+  };
+  yes.onclick = () => { burst(sc.dataset.final?80:25); show(sc.dataset.next); };
+});
+
+/* letter */
+$('#L-greet').textContent = fill(CONFIG.letterGreeting);
+$('#L-body').textContent = fill(CONFIG.letterBody);
+$('#L-sig').innerHTML = fill(CONFIG.letterSign).replace(/\n/g,'<br>');
+$('#env').onclick = () => {
+  $('#env').style.display='none'; $('#envHint').style.display='none';
+  $('#letter').classList.add('open'); $('#toFinal').style.display='inline-block'; burst(12);
+};
+$('#toFinal').onclick = () => show('s-final');
+
+/* final + response */
+$('#finalAsk').textContent = CONFIG.finalQuestion;
+$('#r-title').textContent = 'She said yes! 🥹';
+$('#promises').innerHTML = '<b>From me to you:</b><br>' + CONFIG.promises.map(p=>'♥ '+p).join('<br>');
+$('#send').onclick = () => {
+  const txt = $('#msg').value.trim();
+  if(!txt){ $('#msg').focus(); return; }
+  const full = `${CONFIG.herName}'s answer 💌\n\n${txt}`;
+  burst(60);
+  $('#thanks').style.display='block';
+  $('#thanks').textContent = 'Your words reached my heart 💗 Thank you, '+CONFIG.herName+'.';
+  if(CONFIG.whatsapp){ window.open('https://wa.me/'+CONFIG.whatsapp+'?text='+encodeURIComponent(full),'_blank'); }
+  else if(navigator.clipboard){ navigator.clipboard.writeText(full).then(()=>{$('#thanks').textContent+=' (Copied — send it to him!)'}); }
+};
+</script>
+</body>
+</html>
